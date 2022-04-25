@@ -23,21 +23,33 @@ import java.util.concurrent.TimeUnit;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class StepsForLogin  {
+public class StepsForLogin {
+
     private static final By WELCOME_PHRASE = By.xpath("//span[contains(text(),'Welcome Back')]");
     private static final By ERROR_ALERT = By.xpath("//div[@class='alert alert-danger failed']");
     public static final By SUCCESS_REGISTRATION_MESSAGE = By.cssSelector("[class='alert alert-success signup']");
+
     WebDriver driver;
+    WebDriverWait wait;
+    public static WebElement element;
     String email;
     String password;
-    HomePage homePage;
-    WebDriverWait wait;
     public static String correctPassword;
     public static String correctEmail;
-    StepsForLogin stepsForLogin;
-    public static WebElement element;
-    SignUpPage signUpPage;
+    HomePage homePage;
 
+
+    @Before
+    public void setUp() {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--start-maximized");
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        wait = new WebDriverWait(driver, 10);
+        homePage = new HomePage(driver);
+
+    }
 
     public void createUser() {
 
@@ -57,20 +69,6 @@ public class StepsForLogin  {
 
     }
 
-    @Before
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        wait = new WebDriverWait(driver, 10);
-        homePage = new HomePage(driver);
-        stepsForLogin = new StepsForLogin();
-        signUpPage = new SignUpPage(driver);
-        createUser();
-
-    }
 
     @Given("email for log in")
     public void emailForLogIn() {
@@ -94,7 +92,7 @@ public class StepsForLogin  {
 
     @When("User enters correct login and correct password and clicks Login button")
     public void userEntersCorrectLoginAndCorrectPasswordAndClicksLoginButton() {
-
+        createUser();
         driver.findElement(By.xpath(LoginPage.EMAIL_INPUT)).sendKeys(correctEmail);
         driver.findElement(By.xpath(LoginPage.PASSWORD_INPUT)).sendKeys(correctPassword);
         driver.findElement(By.xpath(LoginPage.LOGIN_BUTTON)).click();
@@ -140,10 +138,10 @@ public class StepsForLogin  {
         assertTrue(driver.findElement(By.xpath("//meta[@content='https://www.phptravels.net/login/failed']")).isEnabled());
     }
 
+    @After
+    public void tearDown() {
+        driver.quit();
 
-   @ After
-   public void tearDown() {
-      driver.quit();
+    }
 
-   }
 }

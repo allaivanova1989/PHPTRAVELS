@@ -18,11 +18,11 @@ Feature: SignUp
   Scenario: Checking the ability to register on the site with different data
     Given User on the signup page
     When user enters data in fields
-      | Fields    | Value                |
-      | FirstName | Alla                 |
-      | LastName  | Ivanova              |
-      | Phone     | 375336523636        |
-      | Email     | ivanova.java@mail.ru |
-      | Password  | dfghjk               |
+      | FirstName | LastName | Phone         | Email                | Password  |
+      | Alla      | Ivanova  | +375263689    | hbjkl@mail.ru        | sedfghjk  |
+      | Pavel     | Petrov   | +375689658933 | zsdxfcvgbhn@mail.ru  | 4562fghj  |
+      | Mark      | Stoun    | +325642554    | fgvbhjvb5@rambler.ru | 4562615ad |
+
+
     And User click on Signup
     Then registration should be successful

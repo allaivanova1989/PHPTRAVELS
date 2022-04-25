@@ -10,6 +10,7 @@ import io.cucumber.java.en.When;
 import io.cucumber.messages.Messages;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,18 +20,20 @@ import pages.HomePage;
 import pages.LoginPage;
 import pages.SignUpPage;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class SignupSteps {
     WebDriver driver;
+    WebDriverWait wait;
+    public static WebElement element;
     String firstName;
     String lastName;
     String phone;
     String email;
     String password;
     SignUpPage signUpPage;
-    WebDriverWait wait;
-    StepsForLogin stepsForLogin;
 
     @Before
     public void setUp() {
@@ -40,12 +43,9 @@ public class SignupSteps {
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         wait = new WebDriverWait(driver, 10);
-        stepsForLogin = new StepsForLogin();
         signUpPage = new SignUpPage(driver);
 
-
     }
-
 
     @Given("User on the signup page")
     public void userOnTheSignupPage() {
@@ -62,11 +62,8 @@ public class SignupSteps {
     }
 
 
-    @When("user enters data in fields")
-    public void userEntersDataInFields(DataTable table) {
 
-        System.out.println(table);
-    }
+
     @When("user enters firstName  {string}")
     public void userEntersFirstNameFirstName(String firstName) {
         this.firstName = firstName;
@@ -95,7 +92,23 @@ public class SignupSteps {
 
     @And("User click on Signup")
     public void userClickOnSignup() {
+        driver.findElement(By.id("cookie_stop")).click();
+        element = driver.findElement(By.xpath("//span[contains(text(),'Signup')]/ancestor::button"));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", element);
         driver.findElement(By.xpath("//span[contains(text(),'Signup')]/ancestor::button")).click();
+        driver.findElement(By.xpath("//span[contains(text(),'Signup')]/ancestor::button")).click();
+    }
+
+    @When("user enters data in fields")
+    public void userEntersDataInFields(DataTable table) {
+        List<Map<String, String>> dataMap = table.asMaps();
+        driver.findElement(By.xpath("//input[@placeholder='First Name']")).sendKeys(dataMap.get(0).get("FirstName"));
+        driver.findElement(By.xpath("//input[@placeholder='Last Name']")).sendKeys(dataMap.get(0).get("LastName"));
+        driver.findElement(By.xpath("//input[@placeholder='Phone']")).sendKeys(dataMap.get(0).get("Phone"));
+        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys(dataMap.get(0).get("Email"));
+        driver.findElement(By.xpath("//input[@placeholder='Password']")).sendKeys(dataMap.get(0).get("Password"));
+
     }
 
     @Then("registration should be successful")
@@ -103,6 +116,7 @@ public class SignupSteps {
         driver.findElement(StepsForLogin.SUCCESS_REGISTRATION_MESSAGE).isDisplayed();
 
     }
+
     @After
     public void tearDown() {
         driver.quit();
