@@ -1,5 +1,6 @@
 package steps;
 
+import elements.Input;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -24,34 +25,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class SignupSteps {
-    WebDriver driver;
-    WebDriverWait wait;
-    public static WebElement element;
+public class SignupSteps extends CommonSteps {
+
+   public static WebElement element;
     String firstName;
     String lastName;
     String phone;
     String email;
     String password;
-    SignUpPage signUpPage;
+
 
     @Before
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--start-maximized");
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        wait = new WebDriverWait(driver, 10);
-        signUpPage = new SignUpPage(driver);
+    public void start() {
+        setUp();
 
     }
 
     @Given("User on the signup page")
     public void userOnTheSignupPage() {
         driver.get("https://www.phptravels.net");
-        driver.findElement(By.xpath(HomePage.SIGNUP_BUTTON)).click();
-        signUpPage.isPageOpen();
+        click(homePage.SIGNUP_BUTTON);
+
     }
 
 
@@ -60,8 +54,6 @@ public class SignupSteps {
         this.lastName = lastName;
         driver.findElement(By.xpath("//input[@placeholder='Last Name']")).sendKeys(lastName);
     }
-
-
 
 
     @When("user enters firstName  {string}")
@@ -92,34 +84,40 @@ public class SignupSteps {
 
     @And("User click on Signup")
     public void userClickOnSignup() {
-        driver.findElement(By.id("cookie_stop")).click();
+        click(STOP_COOKIE);
         element = driver.findElement(By.xpath("//span[contains(text(),'Signup')]/ancestor::button"));
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", element);
-        driver.findElement(By.xpath("//span[contains(text(),'Signup')]/ancestor::button")).click();
-        driver.findElement(By.xpath("//span[contains(text(),'Signup')]/ancestor::button")).click();
+        javascriptExecutor = (JavascriptExecutor) driver;
+        javascriptExecutor.executeScript("arguments[0].scrollIntoView();", element);
+        click(SUBMIT_REGISTRATION);
     }
 
-    @When("user enters data in fields")
-    public void userEntersDataInFields(DataTable table) {
+    @When("user enters data in fields and click on SignUp")
+    public void userEntersDataInFieldsAndClickOnSignup(DataTable table) {
         List<Map<String, String>> dataMap = table.asMaps();
-        driver.findElement(By.xpath("//input[@placeholder='First Name']")).sendKeys(dataMap.get(0).get("FirstName"));
-        driver.findElement(By.xpath("//input[@placeholder='Last Name']")).sendKeys(dataMap.get(0).get("LastName"));
-        driver.findElement(By.xpath("//input[@placeholder='Phone']")).sendKeys(dataMap.get(0).get("Phone"));
-        driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys(dataMap.get(0).get("Email"));
-        driver.findElement(By.xpath("//input[@placeholder='Password']")).sendKeys(dataMap.get(0).get("Password"));
+        for (Map<String, String> stringStringMap : dataMap) {
+            driver.findElement(By.xpath("//input[@placeholder='First Name']")).sendKeys(stringStringMap.get("FirstName"));
+            driver.findElement(By.xpath("//input[@placeholder='Last Name']")).sendKeys(stringStringMap.get("LastName"));
+            driver.findElement(By.xpath("//input[@placeholder='Phone']")).sendKeys(stringStringMap.get("Phone"));
+            driver.findElement(By.xpath("//input[@placeholder='Email']")).sendKeys(stringStringMap.get("Email"));
+            driver.findElement(By.xpath("//input[@placeholder='Password']")).sendKeys(stringStringMap.get("Password"));
+            click(STOP_COOKIE);
+            element = driver.findElement(By.xpath("//span[contains(text(),'Signup')]/ancestor::button"));
+            javascriptExecutor = (JavascriptExecutor) driver;
+            javascriptExecutor.executeScript("arguments[0].scrollIntoView();", element);
+            click(SUBMIT_REGISTRATION);
+        }
 
     }
 
     @Then("registration should be successful")
     public void registrationShouldBeSuccessful() {
-        driver.findElement(StepsForLogin.SUCCESS_REGISTRATION_MESSAGE).isDisplayed();
+        driver.findElement(SUCCESS_REGISTRATION_MESSAGE).isDisplayed();
 
     }
 
     @After
-    public void tearDown() {
-        driver.quit();
+    public void finish() {
+        tearDown();
 
     }
 
