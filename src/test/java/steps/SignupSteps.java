@@ -1,10 +1,13 @@
 package steps;
 
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.messages.Messages;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -18,13 +21,30 @@ import pages.SignUpPage;
 
 import java.util.concurrent.TimeUnit;
 
-public class SignupSteps extends BaseSteps{
+public class SignupSteps {
     WebDriver driver;
     String firstName;
     String lastName;
     String phone;
     String email;
     String password;
+    SignUpPage signUpPage;
+    WebDriverWait wait;
+    StepsForLogin stepsForLogin;
+
+    @Before
+    public void setUp() {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--start-maximized");
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        wait = new WebDriverWait(driver, 10);
+        stepsForLogin = new StepsForLogin();
+        signUpPage = new SignUpPage(driver);
+
+
+    }
 
 
     @Given("User on the signup page")
@@ -41,6 +61,12 @@ public class SignupSteps extends BaseSteps{
         driver.findElement(By.xpath("//input[@placeholder='Last Name']")).sendKeys(lastName);
     }
 
+
+    @When("user enters data in fields")
+    public void userEntersDataInFields(DataTable table) {
+
+        System.out.println(table);
+    }
     @When("user enters firstName  {string}")
     public void userEntersFirstNameFirstName(String firstName) {
         this.firstName = firstName;
@@ -74,7 +100,12 @@ public class SignupSteps extends BaseSteps{
 
     @Then("registration should be successful")
     public void registrationShouldBeSuccessful() {
-        driver.findElement(BaseSteps.SUCCESS_REGISTRATION_MESSAGE).isDisplayed();
+        driver.findElement(StepsForLogin.SUCCESS_REGISTRATION_MESSAGE).isDisplayed();
+
+    }
+    @After
+    public void tearDown() {
+        driver.quit();
 
     }
 
