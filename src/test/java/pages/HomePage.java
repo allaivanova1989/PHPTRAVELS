@@ -1,5 +1,7 @@
 package pages;
 
+import elements.Input;
+import modals.SignUp;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -17,4 +19,14 @@ public class HomePage extends BasePage {
         return driver.findElement(WELCOME).isDisplayed();
     }
 
+    public void FilInTableSignUP(SignUp signUp) {
+
+        new Input(driver,"First Name").write(signUp.getName());
+        new Input(driver,"Last Name").write(signUp.getLastName());
+        new Input(driver,"Phone").write(signUp.getPhone());
+        new Input(driver,"Email").write(signUp.getEmail());
+        new Input(driver,"Password").write(signUp.getPassword());
+
+
+    }
 }

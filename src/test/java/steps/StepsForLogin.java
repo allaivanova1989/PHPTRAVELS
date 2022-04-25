@@ -7,23 +7,22 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import modals.FactoryForSignUp;
+import modals.SignUp;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.HomePage;
 import pages.LoginPage;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class stepsForLogin {
+public class StepsForLogin {
     private static final By WELCOME_PHRASE = By.xpath("//span[contains(text(),'Welcome Back')]");
     private static final By ERROR_ALERT = By.xpath("//div[@class='alert alert-danger failed']");
 
@@ -31,18 +30,19 @@ public class stepsForLogin {
     String email;
     String password;
     HomePage homePage;
-    LoginPage loginPage;
-
     WebDriverWait wait;
+    public static String correctPassword;
+    public static String correctEmail;
 
-    @Before
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        homePage = new HomePage(driver);
-        loginPage = new LoginPage(driver);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        wait = new WebDriverWait(driver, 10);
+
+    @Given("email for log in")
+    public void emailForLogIn() {
+
+    }
+
+    @Given("password for log in")
+    public void passwordForLogIn() {
+
     }
 
     @Given("email for log in {string}")
@@ -55,10 +55,26 @@ public class stepsForLogin {
         this.password = password;
     }
 
-    @When("User enters login and password and clicks Login button")
-    public void userEntersLoginAndPasswordAndClicksLoginButton() {
+    @When("User enters correct login and correct password and clicks Login button")
+    public void userEntersCorrectLoginAndCorrectPasswordAndClicksLoginButton() {
+
+        driver.findElement(By.xpath(LoginPage.EMAIL_INPUT)).sendKeys(correctEmail);
+        driver.findElement(By.xpath(LoginPage.PASSWORD_INPUT)).sendKeys(correctPassword);
+        driver.findElement(By.xpath(LoginPage.LOGIN_BUTTON)).click();
+    }
+
+    @When("User enters incorrect login and correct password and clicks Login button")
+    public void userEntersIncorrectLoginAndCorrectPasswordAndClicksLoginButton() {
         driver.get("https://www.phptravels.net/login");
         driver.findElement(By.xpath(LoginPage.EMAIL_INPUT)).sendKeys(email);
+        driver.findElement(By.xpath(LoginPage.PASSWORD_INPUT)).sendKeys(correctPassword);
+        driver.findElement(By.xpath(LoginPage.LOGIN_BUTTON)).click();
+    }
+
+    @When("User enters correct login and incorrect password and clicks Login button")
+    public void userEntersCorrectLoginAndIncorrectPasswordAndClicksLoginButton() {
+        driver.get("https://www.phptravels.net/login");
+        driver.findElement(By.xpath(LoginPage.EMAIL_INPUT)).sendKeys(correctEmail);
         driver.findElement(By.xpath(LoginPage.PASSWORD_INPUT)).sendKeys(password);
         driver.findElement(By.xpath(LoginPage.LOGIN_BUTTON)).click();
     }
@@ -87,9 +103,5 @@ public class stepsForLogin {
         assertTrue(driver.findElement(By.xpath("//meta[@content='https://www.phptravels.net/login/failed']")).isEnabled());
     }
 
-    @After
-    public void tearDown() {
-        driver.quit();
-    }
 
 }
