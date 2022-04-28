@@ -3,10 +3,7 @@ package steps;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class CommonSteps {
     public static final By STOP_COOKIE = By.id("cookie_stop");
     public static final By SUBMIT_REGISTRATION = By.xpath("//span[contains(text(),'Signup')]/ancestor::button");
+
     public static final By SUCCESS_REGISTRATION_MESSAGE = By.cssSelector("[class='alert alert-success signup']");
     public  static WebDriver driver;
 
@@ -34,8 +32,8 @@ public class CommonSteps {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        wait = new WebDriverWait(driver, 10);
+        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+        wait = new WebDriverWait(driver, 20);
         stepsForLogin = new StepsForLogin();
 
         homePage = new HomePage(driver);

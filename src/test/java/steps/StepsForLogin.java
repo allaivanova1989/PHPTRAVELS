@@ -36,11 +36,11 @@ public class StepsForLogin extends CommonSteps {
     public static String correctEmail;
 
 
-    @Before
-    public void start() {
-        setUp();
-
-    }
+//    @Before
+//    public void start() {
+//        setUp();
+//
+//    }
 
     public void createUser() {
 
@@ -52,6 +52,7 @@ public class StepsForLogin extends CommonSteps {
         correctEmail = driver.findElement(By.xpath("//input[@placeholder='Email']")).getAttribute("value");
         correctPassword = driver.findElement(By.xpath("//input[@placeholder='Password']")).getAttribute("value");
         element = driver.findElement(By.xpath("//span[contains(text(),'Signup')]/ancestor::button"));
+        javascriptExecutor = (JavascriptExecutor) driver;
         javascriptExecutor.executeScript("arguments[0].scrollIntoView();", element);
         click(SUBMIT_REGISTRATION);
 
