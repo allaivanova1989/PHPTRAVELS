@@ -27,6 +27,7 @@ public class StepsForLogin extends CommonSteps {
 
     private static final By WELCOME_PHRASE = By.xpath("//span[contains(text(),'Welcome Back')]");
     private static final By ERROR_ALERT = By.xpath("//div[@class='alert alert-danger failed']");
+    public static final By SUCCESS_REGISTRATION_MESSAGE = By.cssSelector("[class='alert alert-success signup']");
 
 
     WebElement element;
@@ -34,6 +35,7 @@ public class StepsForLogin extends CommonSteps {
     String password;
     public static String correctPassword;
     public static String correctEmail;
+    HomePage homePage;
 
 
 //    @Before

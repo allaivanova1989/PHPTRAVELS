@@ -6,20 +6,25 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import pages.HomePage;
 
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class StepsForBooking extends CommonSteps{
+public class StepsForBooking extends CommonSteps {
 
     String cityName;
-    String arrivalDate;
-    String departureDate;
+    public static final By DATAPICKER = By.cssSelector("(//*[@class=\"datepicker dropdown-menu\"])[1]");
 
+
+    public void setDatepicker(WebDriver driver, String cssSelector, String date)
+    {
+        javascriptExecutor = (JavascriptExecutor) driver;
+        javascriptExecutor.executeScript(
+            String.format("$('body.fixed-nav:nth-child(2)>div.datepicker.dropdown-menu:nth-child(27)').datepicker('setDate','07-06-2022')", cssSelector, date));
+    }
     @Before
     public void start() {
         setUp();
@@ -36,26 +41,22 @@ public class StepsForBooking extends CommonSteps{
         this.cityName = cityName;
         click(By.xpath("(//span[contains(text(), 'Search by City')])[1]"));
         driver.findElement(By.xpath("//input[@class='select2-search__field']")).sendKeys(cityName);
-        Thread.sleep(2000);
+        Thread.sleep(20000);
         driver.findElement(By.xpath("(//*[@role='option'])[1]")).click();
 
     }
 
-    @And("User enters arrivalDate {string} for booking")
-    public void userEntersArrivalDateForBooking(String arrivalDate) {
-        this.arrivalDate = arrivalDate;
-        Actions actions = new Actions(driver);
-        WebElement element =   driver.findElement(By.xpath("//*[@id='checkin']"));
-
-        actions.sendKeys(element,arrivalDate).perform();
-
+    @And("User chooses real arrivalDate for booking")
+    public void userChoosesRealArrivalDateForBooking() {
+        click(homePage.ARRIVAL_DATE);
+        click(By.xpath("((//*[@class='datepicker-days'])[1]//tr//td[contains(text(),'24')])[2]"));
     }
 
-    @And("User enters departuredate {string} for booking")
-    public void userEntersDeparturedateForBooking(String departureDate) {
-        this.departureDate = departureDate;
-        driver.findElement(By.id("checkout")).sendKeys(departureDate);
-        System.out.println();
+    @And("User chooses real departureDate for booking")
+    public void userChoosesRealDepartureDateForBooking() {
+        click(By.xpath("//p[contains(text(),'Travellers')]"));
+        click(homePage.DEPARTURE_DATE);
+        click(By.xpath("(//td[@class='day '][contains(text(),'30')])[2]"));
     }
 
     @And("User chooses travellers and rooms")
@@ -64,12 +65,17 @@ public class StepsForBooking extends CommonSteps{
         click(By.cssSelector(".roomInc i:first-child"));
         click(By.xpath("(//input[@id='adults']/../div)[2]/i"));
 
-
-
     }
 
-    @And("User click on searche button")
-    public void userClickOnSearcheButton() {
+    @And("User chooses past arrivalDate for booking")
+    public void userChoosesPastArrivalDateForBooking() {
+        click(homePage.ARRIVAL_DATE);
+        setDatepicker(driver, "body.fixed-nav:nth-child(2) > div.datepicker.dropdown-menu:nth-child(27)", "07-06-2022");
+       // click(By.xpath("((//*[@class='datepicker-days'])[1]//tr//td[contains(text(),'24')])[1]"));
+    }
+
+    @And("User click on search button")
+    public void userClickOnSearchButton() {
         click(By.xpath("(//button[@id='submit'])[1]"));
     }
 
@@ -77,6 +83,7 @@ public class StepsForBooking extends CommonSteps{
     public void searchingIsFailed() {
         assertTrue(driver.findElement(By.cssSelector("[alt='no results']")).isEnabled());
     }
+
     @After
     public void finish() {
         tearDown();
@@ -84,5 +91,9 @@ public class StepsForBooking extends CommonSteps{
     }
 
 
+    @Then("PastDate is not selected")
+    public void pastdateIsNotSelected() {
+        System.out.println("h");
 
+    }
 }

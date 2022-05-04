@@ -6,8 +6,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.messages.Messages;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
@@ -42,6 +45,8 @@ public class SignupSteps extends CommonSteps {
         this.lastName = lastName;
         driver.findElement(By.xpath("//input[@placeholder='Last Name']")).sendKeys(lastName);
     }
+
+
 
 
     @When("user enters firstName  {string}")

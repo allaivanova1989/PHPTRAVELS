@@ -28,5 +28,7 @@ Feature: SignUp
 
 
 
+    And User click on Signup
+    Then registration is successful
 
     Then registration is successful

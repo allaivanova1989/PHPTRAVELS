@@ -18,11 +18,11 @@ public class CommonSteps {
     public static final By SUBMIT_REGISTRATION = By.xpath("//span[contains(text(),'Signup')]/ancestor::button");
 
     public static final By SUCCESS_REGISTRATION_MESSAGE = By.cssSelector("[class='alert alert-success signup']");
-    public  static WebDriver driver;
+    public static WebDriver driver;
 
-       WebDriverWait wait;
-      StepsForLogin stepsForLogin;
-       SignUpPage signUpPage;
+    WebDriverWait wait;
+    StepsForLogin stepsForLogin;
+    SignUpPage signUpPage;
     JavascriptExecutor javascriptExecutor;
     HomePage homePage;
     LoginPage loginPage;
@@ -41,10 +41,9 @@ public class CommonSteps {
         signUpPage = new SignUpPage(driver);
 
 
-
     }
 
-    public void click (By locator){
+    public void click(By locator) {
         driver.findElement(locator).click();
     }
 
