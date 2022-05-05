@@ -8,23 +8,19 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.HomePage;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import java.util.Calendar;
+import java.util.Date;
+
+import static org.testng.Assert.*;
 
 public class StepsForBooking extends CommonSteps {
 
     String cityName;
-    public static final By DATAPICKER = By.cssSelector("(//*[@class=\"datepicker dropdown-menu\"])[1]");
+    String arrivalDateAtFirst;
 
-
-    public void setDatepicker(WebDriver driver, String cssSelector, String date)
-    {
-        javascriptExecutor = (JavascriptExecutor) driver;
-        javascriptExecutor.executeScript(
-            String.format("$('body.fixed-nav:nth-child(2)>div.datepicker.dropdown-menu:nth-child(27)').datepicker('setDate','07-06-2022')", cssSelector, date));
-    }
     @Before
     public void start() {
         setUp();
@@ -34,6 +30,7 @@ public class StepsForBooking extends CommonSteps {
     @Given("User on the start page")
     public void userOnTheStartPage() {
         driver.get("https://www.phptravels.net");
+        arrivalDateAtFirst = driver.findElement(By.id("checkin")).getAttribute("value");
     }
 
     @When("User enters cityName {string} for booking")
@@ -41,7 +38,7 @@ public class StepsForBooking extends CommonSteps {
         this.cityName = cityName;
         click(By.xpath("(//span[contains(text(), 'Search by City')])[1]"));
         driver.findElement(By.xpath("//input[@class='select2-search__field']")).sendKeys(cityName);
-        Thread.sleep(20000);
+        Thread.sleep(1500);
         driver.findElement(By.xpath("(//*[@role='option'])[1]")).click();
 
     }
@@ -70,8 +67,19 @@ public class StepsForBooking extends CommonSteps {
     @And("User chooses past arrivalDate for booking")
     public void userChoosesPastArrivalDateForBooking() {
         click(homePage.ARRIVAL_DATE);
-        setDatepicker(driver, "body.fixed-nav:nth-child(2) > div.datepicker.dropdown-menu:nth-child(27)", "07-06-2022");
-       // click(By.xpath("((//*[@class='datepicker-days'])[1]//tr//td[contains(text(),'24')])[1]"));
+        int dayOfMonth = Calendar.DAY_OF_MONTH;
+        int pastDay;
+        if (dayOfMonth == 1) {
+            click(By.xpath("((//*[@class='datepicker-days'])[1]//tr//td[contains(text(),'30')])[1]"));
+        } else {
+            pastDay = dayOfMonth - 1;
+            click(By.xpath("((//*[@class='datepicker-days'])[1]//tr//td[contains(text(),'" + pastDay + "')])[1]"));
+        }
+
+
+//        JavascriptExecutor js = (JavascriptExecutor) driver;
+//        js.executeScript("document.getElementById('checkin').setAttribute('value', '07-06-2022')");
+
     }
 
     @And("User click on search button")
@@ -84,6 +92,13 @@ public class StepsForBooking extends CommonSteps {
         assertTrue(driver.findElement(By.cssSelector("[alt='no results']")).isEnabled());
     }
 
+    @Then("PastDate is not selected")
+    public void pastdateIsNotSelected() {
+        assertEquals(driver.findElement(By.id("checkin")).getAttribute("value"), arrivalDateAtFirst);
+
+
+    }
+
     @After
     public void finish() {
         tearDown();
@@ -91,9 +106,4 @@ public class StepsForBooking extends CommonSteps {
     }
 
 
-    @Then("PastDate is not selected")
-    public void pastdateIsNotSelected() {
-        System.out.println("h");
-
-    }
 }

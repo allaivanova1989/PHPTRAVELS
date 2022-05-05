@@ -9,11 +9,9 @@ Feature: Booking hotels
     And User click on search button
     Then Searching is failed
 
-  Scenario: Checking the ability to book hotel with past arrivalDate, real departureDate and real city
+  Scenario: Checking the impossibility of choosing a date earlier than the current one
     Given User on the start page
     When User enters cityName "Berlin" for booking
     And User chooses past arrivalDate for booking
-    And User chooses real departureDate for booking
-
     Then PastDate is not selected
 

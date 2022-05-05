@@ -6,14 +6,14 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.messages.Messages;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import java.util.List;
+import java.util.stream.Stream;
+
 import static org.testng.Assert.assertTrue;
 
 public class SignupSteps extends CommonSteps {
@@ -88,6 +88,7 @@ public class SignupSteps extends CommonSteps {
     public void userEntersDataInFieldsAndClickOnSignup(DataTable table) {
 
         List<List<String>> data = table.asLists();
+
                     driver.findElement(By.xpath("//input[@placeholder='First Name']")).sendKeys(data.get(1).get(1));
             driver.findElement(By.xpath("//input[@placeholder='Last Name']")).sendKeys(data.get(2).get(1));
             driver.findElement(By.xpath("//input[@placeholder='Phone']")).sendKeys(data.get(3).get(1));
