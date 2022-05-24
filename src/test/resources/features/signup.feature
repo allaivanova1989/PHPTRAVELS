@@ -19,7 +19,7 @@ Feature: SignUp
   Scenario: Checking the ability to register on the site with different data(table)
     Given User on the signup page
     When user enters data in fields and click on SignUp
-      | Fields    | Value         |
+      | Fields    | Value          |
       | FirstName | Alla           |
       | LastName  | Ivanova        |
       | Phone     | +375263689     |

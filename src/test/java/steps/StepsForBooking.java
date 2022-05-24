@@ -8,8 +8,10 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.HomePage;
+import pages.HomePageFactory;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -17,8 +19,9 @@ import java.util.Date;
 import static org.testng.Assert.*;
 
 public class StepsForBooking extends CommonSteps {
+    HomePageFactory homePageFactory =PageFactory.initElements(driver,HomePageFactory.class);
 
-    String cityName;
+
     String arrivalDateAtFirst;
 
     @Before
@@ -27,24 +30,22 @@ public class StepsForBooking extends CommonSteps {
 
     }
 
-    @Given("User on the start page")
-    public void userOnTheStartPage() {
+    @Given("User on the Homepage")
+    public void userOnTheHomepage() {
         driver.get("https://www.phptravels.net");
+
         arrivalDateAtFirst = driver.findElement(By.id("checkin")).getAttribute("value");
     }
 
     @When("User enters cityName {string} for booking")
     public void userEntersCityNameForBooking(String cityName) throws InterruptedException {
-        this.cityName = cityName;
-        click(By.xpath("(//span[contains(text(), 'Search by City')])[1]"));
-        driver.findElement(By.xpath("//input[@class='select2-search__field']")).sendKeys(cityName);
-        Thread.sleep(1500);
-        driver.findElement(By.xpath("(//*[@role='option'])[1]")).click();
-
+        HomePageFactory homePageFactory =PageFactory.initElements(driver,HomePageFactory.class);
+        homePageFactory.chooseCity(cityName);
     }
 
     @And("User chooses real arrivalDate for booking")
     public void userChoosesRealArrivalDateForBooking() {
+
         click(homePage.ARRIVAL_DATE);
         click(By.xpath("((//*[@class='datepicker-days'])[1]//tr//td[contains(text(),'24')])[2]"));
     }
