@@ -7,19 +7,14 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import pages.HomePage;
 import pages.HomePageFactory;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import static org.testng.Assert.*;
 
 public class StepsForBooking extends CommonSteps {
-    HomePageFactory homePageFactory =PageFactory.initElements(driver,HomePageFactory.class);
 
 
     String arrivalDateAtFirst;

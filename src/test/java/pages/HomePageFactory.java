@@ -1,5 +1,8 @@
 package pages;
 
+import elements.Input;
+import modals.SignUp;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -13,33 +16,36 @@ public class HomePageFactory {
     }
 
     @FindBy(xpath ="//header/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/a[1]")
-    WebElement signupButton;
+   public WebElement signupButton;
 
 
     @FindBy(xpath ="//header/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/a[2]")
-    WebElement loginButton;
+    public WebElement loginButton;
 
     @FindBy(xpath ="//span[@id='select2-hotels_city-container']")
-    WebElement searchByCityField;
+    public WebElement searchByCityField;
 
     @FindBy(css ="#checkin")
-    WebElement checkinDate;
+    public WebElement checkinDate;
 
     @FindBy(css ="#checkout")
-    WebElement checkoutDate;
+    public WebElement checkoutDate;
 
 
     @FindBy(xpath ="//body[1]/section[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/form[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/a[1]/p[1]")
-    WebElement travellersChose;
+   public WebElement travellersChose;
 
     @FindBy(xpath ="//body/section[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/form[1]/div[1]/div[1]/div[4]/div[1]/button[1]/span[1]/i[1]")
-    WebElement searchButton;
+    public WebElement searchButton;
 
     @FindBy(xpath = "//body/span[1]/span[1]/span[1]/input[1]")
-    WebElement searchByCityInput;
+   public WebElement searchByCityInput;
 
     @FindBy(xpath = "(//*[@role='option'])[1]")
-    WebElement firstResultCity;
+    public WebElement firstResultCity;
+
+    @FindBy(xpath = "//h2[@class='sec__title font-size-30 text-white'][span]")
+    public WebElement welcome;
 
     public void clickOnLogin (){
         loginButton.click();
@@ -56,4 +62,21 @@ public class HomePageFactory {
         firstResultCity.click();
 
     }
+
+    public boolean isPageOpen() {
+        return welcome.isDisplayed();
+    }
+
+    public void FilInTableSignUP(SignUp signUp) {
+
+        new Input(driver,"First Name").write(signUp.getName());
+        new Input(driver,"Last Name").write(signUp.getLastName());
+        new Input(driver,"Phone").write(signUp.getPhone());
+        new Input(driver,"Email").write(signUp.getEmail());
+        new Input(driver,"Password").write(signUp.getPassword());
+
+
+    }
+
+
 }

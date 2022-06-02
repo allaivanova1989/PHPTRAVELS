@@ -9,7 +9,9 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import pages.HomePageFactory;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -17,6 +19,7 @@ import java.util.stream.Stream;
 import static org.testng.Assert.assertTrue;
 
 public class SignupSteps extends CommonSteps {
+    HomePageFactory homePageFactory = PageFactory.initElements(driver,HomePageFactory.class);
 
    public static WebElement element;
     String firstName;

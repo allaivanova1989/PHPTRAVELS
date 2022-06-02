@@ -6,19 +6,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import modals.FactoryForSignUp;
 import modals.SignUp;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.HomePage;
-import pages.LoginPage;
-import pages.SignUpPage;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -38,11 +30,11 @@ public class StepsForLogin extends CommonSteps {
     HomePage homePage;
 
 
-//    @Before
-//    public void start() {
-//        setUp();
-//
-//    }
+    @Before
+    public void start() {
+        setUp();
+
+    }
 
     public void createUser() {
 
